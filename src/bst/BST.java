@@ -86,17 +86,18 @@ public class BST implements OrderedSet {
 	//
 	protected void bstAdd(Node n, Comparable data) {
             
-            current = root;
+            current = n;
             Node newNode = new Node(data);
             while(current != null){
-                if (data.equals(n.data)) {
+                if (data.equals(current.data)) {
                     // do nothing
                      return;
                 }
-                else if (data.compareTo(n.data) < 0){
+                else if (data.compareTo(current.data) < 0){
                     if (current.left == null){
                         current.left = newNode;
-                        current = null;
+                        current = null;  //  to exit while
+                        size++;
                     }
                     else {
                         current = current.left;
@@ -106,11 +107,13 @@ public class BST implements OrderedSet {
                     if (current.right == null){
                         current.right = newNode;
                         current = null;
+                        size++;
                     }
                     else {
                         current = current.right;
                     }
                 }
+                
             }
 		
 	}
@@ -122,7 +125,7 @@ public class BST implements OrderedSet {
 	// true.
 	public boolean contains(Comparable data) {  // *
               if (bstFind(root, data) == null){
-                  return true;
+                  return false;
               }            
               return true;
 	}
@@ -148,8 +151,7 @@ public class BST implements OrderedSet {
 	
 	
 	// Returns the first (smallest) value in the tree. Can be used
-	// to start an iteration, along with "next()". Returns null if
-	// the tree is empty.
+	// to start an iteration, along with "next()". Returns null if the tree is empty.
 	public Comparable first() {
 		current = root;
 		if (current != null) current = leftMostDecendant(root);
@@ -175,10 +177,12 @@ public class BST implements OrderedSet {
 	}
 	
 	// Helper method to find the node that has the smallest value
-	// in the left subtree of the given node. If the node
-	// has no left subtree just returns null.
+	// in the left subtree of the given node. If the node has no left subtree just returns null.
 	protected Node leftMostDecendant(Node n) {  // *
-		return null;
+		if(n.left == null) {
+                    return n;
+                }
+                return leftMostDecendant(n.left);
 	}
 	
 	// Helper method to find the node that has the next highest value
@@ -213,15 +217,19 @@ public class BST implements OrderedSet {
 	public void inorder() {
 		inorder(root);
 		System.out.println();
-	}
-	
+	}	
 	
 	// The recursive helper method that does the actual inorder traversal.
 	protected void inorder(Node n) {  // *
 	   // if n is not null:
 	   //     - do inorder traversal of left subtree
 	   //     - print n's data value plus a space character
-	   //     - do inorder traversal of right subtree
+	   //     - do inorder traversal of right subtree 
+               if (n == null)
+                   return;                 
+               inorder(n.left);   
+               System.out.print(" ");                     
+               inorder(n.right);   
 	}
 	
 	
@@ -244,7 +252,7 @@ public class BST implements OrderedSet {
 		BST bst = new BST();
 		boolean bstError = false;
 		
-		int n = 10;
+		int n = 3;
 		int seed = -1;
 		boolean setSeed = false;
 		boolean debug = false;
