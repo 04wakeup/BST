@@ -5,7 +5,7 @@
  */
 package bst;
 
-public interface OrderedSet {
+public interface OrderedSet { 
 	
 	public void add(Comparable data);
 	public boolean contains(Comparable data);
